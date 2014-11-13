@@ -12,7 +12,7 @@ npm install okcoin-api --save
 
 How to use it 
 ```
-var OKCoin = require('okcoin');
+var OKCoin = require('okcoin-api');
 var okcoin = new OKCoin(process.env.OKCOIN_PARTNER, process.env.OKCOIN_API_SECRET);
 ```
 
