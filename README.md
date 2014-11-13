@@ -7,7 +7,7 @@ OKCoin-API is a NodeJS wrapper over the API of OKCoin, the Chinese Bitcoin excha
 
 Installation
 ```
-npm install OKCoin-API --save
+npm install okcoin-api --save
 ```
 
 How to use it 
