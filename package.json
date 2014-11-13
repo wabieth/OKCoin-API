@@ -1,5 +1,5 @@
 {
-  "name": "OKCoin-API",
+  "name": "okcoin-api",
   "version": "0.1.0",
   "description": "NodeJS wrapper over the API of OKCoin, Chinese Bitcoin exchange",
   "keywords": [
