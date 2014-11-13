@@ -114,7 +114,6 @@ function OKCoin(partner, secret) {
         }
         formattedObject += arr[i] + '=' + obj[arr[i]];
     }
-    console.log( formattedObject ); 
     return formattedObject;
 }
 
