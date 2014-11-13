@@ -1,0 +1,42 @@
+{
+  "name": "OKCoin-API",
+  "version": "0.1.0",
+  "description": "NodeJS wrapper over the API of OKCoin, Chinese Bitcoin exchange",
+  "keywords": [
+    "OKCoin",
+    "api",
+    "btc",
+    "bitcoin",
+    "exchange",
+    "china"
+  ],
+  "scripts": {
+    "test": "DEBUG= ./node_modules/.bin/mocha -t 5000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/etiennetatur/OKCoin-API"
+  },
+  "main": "okcoin.js",
+  "author": "Etienne TATUR (https://github.com/etiennetatur)",
+  "contributors": [
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "MD5": "^1.2.1",
+    "request": "^2.27.0"
+  },
+   "devDependencies": {
+    "mocha": "*",
+    "sinon": "*",
+    "should": "*"
+  },
+  "engines": {
+    "node": ">=0.10"
+  },
+  "bugs": {
+    "url": "https://github.com/etiennetatur/OKCoin-API/issues",
+    "email": "etienne.tatur@gmail.com"
+  },
+  "readmeFilename": "README.md"
+}
