@@ -20,33 +20,42 @@ Examples
 ```
 // Get ticker information
 okcoin.ticker(function (err, data) {
-      if (err) return done(err);
-      console.log(data);
+    if (err) {
+      console.log(err);
+		}
+      console.log(JSON.stringify(data));
     });
 
 // Get market depth
 okcoin.depth(function (err, data) {
-      if (err) return done(err);
-      console.log(data);
+    if (err) {
+      console.log(err);
+		}
+      console.log(JSON.stringify(data));
     });
-
+    
 // Get trades
 okcoin.trades(function (err, data) {
-      if (err) return done(err);
-      console.log(data);
+    if (err) {
+      console.log(err);
+		}
+      console.log(JSON.stringify(data));
     });
-
 
 // Get your balance
 okcoin.userinfo(function (err, data) {
-      if (err) return done(err);
-      console.log(data);
+    if (err) {
+      console.log(err);
+		}
+      console.log(JSON.stringify(data));
     });
     
 // Sell BTC at market price
 okcoin.trade('btc_cny','sell_market',null,0.01, function (err, data) {
-      if (err) return done(err);
-      console.log(data);
+    if (err) {
+      console.log(err);
+		}
+      console.log(JSON.stringify(data));
     });
 ```
 
