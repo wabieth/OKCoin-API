@@ -45,6 +45,12 @@ function OKCoin(partner, secret) {
     var params = {};
     return privateMethod(path, params, callback);
   }
+
+  function order_info(callback) {
+    var path  = '/' + config.version + '/order_info.do';
+    var params = {};
+    return privateMethod(path, params, callback);
+  }
   
   function trade(symbol, type, price, amount, callback) {
     var path  = '/' + config.version + '/trade.do';
