@@ -15,7 +15,8 @@ function OKCoin(partner, secret) {
     url: 'https://www.okcoin.cn/api',
     version: 'v1',
     partner: partner,
-    secret: secret
+    secret: secret,
+    timeoutMS: 10000
   };
 
   /**
@@ -46,9 +47,11 @@ function OKCoin(partner, secret) {
     return privateMethod(path, params, callback);
   }
 
-  function order_info(callback) {
+  function order_info(symbol, order_id, callback) {
     var path  = '/' + config.version + '/order_info.do';
     var params = {};
+    if (symbol) params.symbol =  symbol;
+    if (order_id) params.order_id = order_id;
     return privateMethod(path, params, callback);
   }
   
@@ -136,7 +139,9 @@ function OKCoin(partner, secret) {
     var options = {
       url: url,
       method: requestType,
-      form: params
+      form: params,
+			timeout: config.timeoutMS
+
     };
     
     var req = request(options, function(error, response, body) {
@@ -198,6 +203,7 @@ function OKCoin(partner, secret) {
   self.depth = depth;
   self.userinfo = userinfo;
   self.trade = trade;
+  self.order_info = order_info;
 }
 
 module.exports = OKCoin;

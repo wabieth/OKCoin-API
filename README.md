@@ -66,6 +66,11 @@ okcoin.trade('btc_cny','sell_market',null,0.01, function (err, data) {
 
 TODO : 
 
-Add the methods : batch_trade, cancel_order, order_info, orders_info, orders_history
-
+Add the methods : batch_trade, cancel_order, orders_info, orders_history
+Add future trading
 Add OKCoin.com compatibility
+
+How to test : 
+
+Specify your environnement variables : OKCOIN_API_SECRET, OKCOIN_API_PARTNER (windows : set OKCOIN_API_SECRET=$yoursecret)
+launch the test using : npm test

@@ -49,7 +49,17 @@ describe('okcoin.userinfo', function () {
     });
   });
 });
-
+describe('okcoin.order_info', function () {
+  it('should return order info', function (done) {
+    var symbol = 'btc_cny';
+    var order_id = '-1';
+    okcoin.order_info(symbol, order_id, function (err, data) {
+      if (err) return done(err);
+      data.should.have.property('result');
+      done();
+    });
+  });
+});
 /*
  *
  *      WARNING : THESE TESTS WILL SELL OR BUY REAL BTC, 
