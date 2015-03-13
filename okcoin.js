@@ -16,7 +16,7 @@ function OKCoin(partner, secret) {
     version: 'v1',
     partner: partner,
     secret: secret,
-    timeoutMS: 10000
+    timeoutMS: 18000
   };
 
   /**
@@ -50,8 +50,8 @@ function OKCoin(partner, secret) {
   function order_info(symbol, order_id, callback) {
     var path  = '/' + config.version + '/order_info.do';
     var params = {};
-    if (symbol) params.symbol =  symbol;
-    if (order_id) params.order_id = order_id;
+    params.symbol =  symbol;
+    params.order_id = order_id;
     return privateMethod(path, params, callback);
   }
   
@@ -64,6 +64,18 @@ function OKCoin(partner, secret) {
     params.type = type;
     return privateMethod(path, params, callback);
   }
+  
+  function withdraw(symbol, chargefee, trade_pwd, withdraw_address, withdraw_amount, callback) {
+    var path  = '/' + config.version + '/withdraw.do';
+    var params = {};
+    params.chargefee = chargefee;
+    params.symbol = symbol;
+    params.trade_pwd = trade_pwd;
+    params.withdraw_address = withdraw_address;
+    params.withdraw_amount = withdraw_amount;
+    return privateMethod(path, params, callback);
+  }
+  
 
   /**
    * This method makes a public API request.
@@ -204,6 +216,7 @@ function OKCoin(partner, secret) {
   self.userinfo = userinfo;
   self.trade = trade;
   self.order_info = order_info;
+  self.withdraw = withdraw;
 }
 
 module.exports = OKCoin;

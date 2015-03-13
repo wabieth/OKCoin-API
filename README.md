@@ -72,5 +72,6 @@ Add OKCoin.com compatibility
 
 How to test : 
 
-Specify your environnement variables : OKCOIN_API_SECRET, OKCOIN_API_PARTNER (windows : set OKCOIN_API_SECRET=$yoursecret)
-launch the test using : npm test
+- Specify your environnement variables : OKCOIN_API_SECRET, OKCOIN_API_PARTNER (windows : set OKCOIN_API_SECRET=$yoursecret). 
+
+- Launch the tests using : npm test

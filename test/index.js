@@ -75,4 +75,17 @@ describe.skip('okcoin.trade', function () {
     });
   });
 });
-
+describe('okcoin.withdraw', function () {
+  it('should return a withraw_id', function (done) {
+    if (!process.env.TRADE_PWD) throw new Error('You must specify a TRADE_PWD environment variable to run this test');
+    var trade_pwd = process.env.TRADE_PWD;
+    var withdraw_address = '18erC7jwDWnoWZBAscdEF8u3UG1z6Eem1j';
+    var withdraw_amount = 0.001;
+    var chargeFee = 0.000;
+    okcoin.trade('btc_cny', chargeFee, trade_pwd, withdraw_address, withdraw_address, function (err, data) {
+      if (err) return done(err);
+      data.should.have.property('withraw_id');
+      done();
+    });
+  });
+});
