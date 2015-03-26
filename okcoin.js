@@ -1,20 +1,20 @@
 'use strict';
 
-var request  = require('request');
+var request  = require('requestretry');
 var md5 = require('MD5');
 
 /**
  * OKCoin connects to the OKCoin.cn API
- * @param {String} partner    
+ * @param {String} api_key    
  * @param {String} secret API Secret
  */
-function OKCoin(partner, secret) {
+function OKCoin(api_key, secret) {
   var self = this;
 
   var config = {
     url: 'https://www.okcoin.cn/api',
     version: 'v1',
-    partner: partner,
+    api_key: api_key,
     secret: secret,
     timeoutMS: 18000
   };
@@ -55,6 +55,14 @@ function OKCoin(partner, secret) {
     return privateMethod(path, params, callback);
   }
   
+  function cancel_order (symbol, order_id, callback) {
+    var path  = '/' + config.version + '/cancel_order.do';
+    var params = {};
+    params.symbol =  symbol;
+    params.order_id = order_id;
+    return privateMethod(path, params, callback);
+  }
+  
   function trade(symbol, type, price, amount, callback) {
     var path  = '/' + config.version + '/trade.do';
     var params = {};
@@ -73,6 +81,16 @@ function OKCoin(partner, secret) {
     params.trade_pwd = trade_pwd;
     params.withdraw_address = withdraw_address;
     params.withdraw_amount = withdraw_amount;
+    return privateMethod(path, params, callback);
+  }
+
+  function account_records(symbol, type, current_page, page_length, callback) {
+    var path  = '/' + config.version + '/account_records.do';
+    var params = {};
+    params.symbol = symbol;
+    params.type = type;
+    params.current_page = current_page;
+    params.page_length = page_length;
     return privateMethod(path, params, callback);
   }
   
@@ -98,7 +116,7 @@ function OKCoin(partner, secret) {
    */
   function privateMethod(path, params, callback) {
     var url    = config.url + path;
-    params.partner = config.partner;
+    params.api_key = config.api_key;
     params.sign  = getMessageSignature(params);
     return okcoinRequest(url, 'POST', params, callback);
   }
@@ -152,14 +170,15 @@ function OKCoin(partner, secret) {
       url: url,
       method: requestType,
       form: params,
-			timeout: config.timeoutMS
-
+			timeout: config.timeoutMS,
+      maxAttempts: 3,
+      retryDelay: 1000,  // (default) wait for 5s before trying again
+      retryStrategy: request.RetryStrategies.HTTPOrNetworkError // (default) retry on 5xx or network errors
     };
     
     var req = request(options, function(error, response, body) {
       if(typeof callback === 'function') {
         var data;
-
         if(error) {
           callback.call(self, new Error('Error in server response: ' + JSON.stringify(error)), null);
           return;
@@ -189,20 +208,41 @@ function OKCoin(partner, secret) {
    * @return {String}                Error
    */
   function error_code_meaning(error_code) {
-        var codes = { 10000 : 'Required parameter can not be null',
-                  10001 : 'Requests are too frequent',
-                  10002 : 'System Error',
-                  10003 : 'Restricted list request, please try again later',
-                  10004 : 'IP restriction',
-                  10005 : 'Key does not exist',
-                  10006 : 'User does not exist',
-                  10007 : 'Signatures do not match',
-                  10008 : 'Illegal parameter',
-                  10009 : 'Order does not exist',
-                  10010 : 'Insufficient balance',
-                  10011 : 'Order is less than minimum trade amount',
-                  10012 : 'Unsupported symbol (not btc_cny or ltc_cny)',
-                  10013 : 'This interface only accepts https requests' };
+        var codes = {     10000 : 'Required parameter can not be null',
+                          10001 : 'Requests are too frequent',
+                          10002 : 'System Error',
+                          10003 : 'Restricted list request, please try again later',
+                          10004 : 'IP restriction',
+                          10005 : 'Key does not exist',
+                          10006 : 'User does not exist',
+                          10007 : 'Signatures do not match',
+                          10008 : 'Illegal parameter',
+                          10009 : 'Order does not exist',
+                          10010 : 'Insufficient balance',
+                          10011 : 'Order is less than minimum trade amount',
+                          10012 : 'Unsupported symbol (not btc_cny or ltc_cny)',
+                          10013 : 'This interface only accepts https requests',
+                          10014 : 'Order price must be between 0 and 1,000,000',
+                          10015 : 'Order price differs from current market price too much',
+                          10016 : 'Insufficient coins balance',
+                          10017 : 'API authorization error',
+                          10026 : 'Loan (including reserved loan) and margin cannot be withdrawn',
+                          10027 : 'Cannot withdraw within 24 hrs of authentication information modification',
+                          10028 : 'Withdrawal amount exceeds daily limit',
+                          10029 : 'Account has unpaid loan, please cancel/pay off the loan before withdraw',
+                          10031 : 'Deposits can only be withdrawn after 6 confirmations',
+                          10032 : 'Please enabled phone/google authenticator',
+                          10033 : 'Fee higher than maximum network transaction fee',
+                          10034 : 'Fee lower than minimum network transaction fee',
+                          10035 : 'Insufficient BTC/LTC',
+                          10036 : 'Withdrawal amount too low',
+                          10037 : 'Trade password not set',
+                          10040 : 'Withdrawal cancellation fails',
+                          10041 : 'Withdrawal address not approved',
+                          10042 : 'Admin password error',
+                          10100 : 'User account frozen',
+                          10216 : 'Non-available API',
+                            503 : 'Too many requests (Http)'};
         if (!codes[error_code]) {
             return 'OKCoin error code :' + error_code +' is not yet supported by the API';
             }
@@ -217,6 +257,7 @@ function OKCoin(partner, secret) {
   self.trade = trade;
   self.order_info = order_info;
   self.withdraw = withdraw;
+  self.account_records = account_records;
 }
 
 module.exports = OKCoin;

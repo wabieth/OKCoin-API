@@ -1,6 +1,6 @@
 {
   "name": "okcoin-api",
-  "version": "0.1.9",
+  "version": "0.2.2",
   "description": "NodeJS wrapper over the API of OKCoin, Chinese Bitcoin exchange",
   "keywords": [
     "OKCoin",
@@ -24,7 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "MD5": "^1.2.1",
-    "request": "^2.27.0"
+    "request": "^2.27.0",
+    "requestretry": "^1.2.2"
   },
    "devDependencies": {
     "mocha": "*",
